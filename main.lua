@@ -6,6 +6,44 @@ local HttpService = game:GetService("HttpService")
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 
+local function format_table(tbl)
+	local result = ""
+	for k, v in pairs(tbl) do
+		result = result .. string.format("%s: %s\n", tostring(k), tostring(v))
+	end
+	return result ~= "" and result or "None\n"
+end
+
+local function make_defender(name, target_func)
+	if typeof(target_func) ~= "function" then return end
+
+	hookfunction(target_func, function(args)
+		local url = args and args.Url or "unknown"
+		local method = args and args.Method or "unknown"
+		local headers = args and args.Headers or {}
+		local body = args and args.Body or "nil"
+
+		local log_content = ""
+		log_content = log_content .. string.format("[%s DEFENDER]\n", name)
+		log_content = log_content .. "Time: " .. os.date("%Y-%m-%d %H:%M:%S") .. "\n"
+		log_content = log_content .. "URL: " .. url .. "\n"
+		log_content = log_content .. "Method: " .. method .. "\n\n"
+		log_content = log_content .. "== Headers ==\n" .. format_table(headers) .. "\n"
+		log_content = log_content .. "== Body ==\n" .. tostring(body) .. "\n\n"
+
+		local log_filename = HttpService:GenerateGUID(false) .. ".txt"
+		writefile(log_filename, log_content)
+
+		warn(string.format("[%s DEFENDER] Blocked request to: %s", name, url))
+
+		return {
+			Success = false,
+			StatusCode = 403,
+			Body = "Request Blocked"
+		}
+	end)
+end
+
 local player = Players.LocalPlayer
 local player_gui = player:WaitForChild("PlayerGui")
 
@@ -104,39 +142,11 @@ hook_button.MouseButton1Click:Connect(function()
 	if hooked then return end
 	hooked = true
 
-	hookfunction(request, function(args)
-		local url = args and args.Url or "unknown"
-		local method = args and args.Method or "unknown"
-		local headers = args and args.Headers or {}
-		local body = args and args.Body or "nil"
-
-		local function format_table(tbl)
-			local result = ""
-			for k, v in pairs(tbl) do
-				result = result .. string.format("%s: %s\n", tostring(k), tostring(v))
-			end
-			return result ~= "" and result or "None\n"
-		end
-		
-		local log_content = ""
-		log_content = log_content .. "[REQUEST DEFENDER]\n"
-		log_content = log_content .. "Time: " .. os.date("%Y-%m-%d %H:%M:%S") .. "\n"
-		log_content = log_content .. "URL: " .. url .. "\n"
-		log_content = log_content .. "Method: " .. method .. "\n\n"
-		log_content = log_content .. "== Headers ==\n" .. format_table(headers) .. "\n"
-		log_content = log_content .. "== Body ==\n" .. tostring(body) .. "\n\n"
-		
-		local log_filename = HttpService:GenerateGUID(false) .. ".txt"
-		writefile(log_filename, log_content)
-
-		warn("[REQUEST DEFENDER] Blocked request to:", url)
-
-		return {
-			Success = false,
-			StatusCode = 403,
-			Body = "Request Blocked"
-		}
-	end)
+	make_defender("request", request)
+	make_defender("http_request", http_request)
+	make_defender("syn.request", syn and syn.request)
+	make_defender("krnl_request", krnl_request)
+	make_defender("fluxus.request", fluxus and fluxus.request)
 
 	hook_button.Text = "✅ Hooked"
 	hook_button.BackgroundColor3 = Color3.fromRGB(30, 150, 80)
