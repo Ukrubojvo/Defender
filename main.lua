@@ -145,6 +145,7 @@ hook_button.MouseButton1Click:Connect(function()
 	make_defender("request", request)
 	make_defender("http_request", http_request)
 	make_defender("syn.request", syn and syn.request)
+	make_defender("http.request", http and http.request)
 	make_defender("krnl_request", krnl_request)
 	make_defender("fluxus.request", fluxus and fluxus.request)
 
