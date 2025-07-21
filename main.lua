@@ -2,6 +2,36 @@ if typeof(hookfunction) ~= "function" then
 	warn("[REQUEST DEFENDER] This executable is not supported.")
 end
 
+print([[
+
+                            ,--.
+                           {    }
+                           K,   }
+                          /  ~Y`
+                     ,   /   /
+                    {_'-K.__/
+                      `/-.__L._
+                      /  ' /`\_}
+                     /  ' /
+             ____   /  ' /
+      ,-'~~~~    ~~/  ' /_
+    ,'             ``~~~  ',
+   (                        Y
+  {                         I
+ {      -                    `,
+ |       ',                   )
+ |        |   ,..__      __. Y
+ |    .,_./  Y ' / ^Y   J   )|
+ \           |' /   |   |   ||
+  \          L_/    . _ (_,.'(
+   \,   ,      ^^""' / |      )
+     \_  \          /,L]     /
+       '-_~-,       ` `   ./`
+          `'{_            )
+              ^^\..___,.--`     
+]])
+
+local start_time = tick()
 local HttpService = game:GetService("HttpService")
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
@@ -55,7 +85,7 @@ screen_gui.Parent = player_gui
 
 local main_frame = Instance.new("Frame")
 main_frame.Size = UDim2.new(0, 260, 0, 110)
-main_frame.Position = UDim2.new(0.5, -130, 0.5, -55)
+main_frame.Position = UDim2.new(0.5, 0, 0.5, 0)
 main_frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 main_frame.BorderSizePixel = 0
 main_frame.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -148,8 +178,10 @@ hook_button.MouseButton1Click:Connect(function()
 	make_defender("http.request", http and http.request)
 	make_defender("krnl_request", krnl_request)
 	make_defender("fluxus.request", fluxus and fluxus.request)
-
+	print("[REQUEST DEFENDER] Done!")
 	hook_button.Text = "✅ Hooked"
 	hook_button.BackgroundColor3 = Color3.fromRGB(30, 150, 80)
 	hook_button.AutoButtonColor = false
 end)
+
+print("[REQUEST DEFENDER] Loaded in "..tick() - start_time.."s!")
