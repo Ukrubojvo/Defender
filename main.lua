@@ -34,7 +34,7 @@ local function make_defender(name, target_func)
 		local log_filename = HttpService:GenerateGUID(false) .. ".txt"
 		writefile(log_filename, log_content)
 
-		warn(string.format("[%s DEFENDER] Blocked request to: %s", name, url))
+		warn(string.format("[REQUEST DEFENDER] Blocked request to: %s", url))
 
 		return {
 			Success = false,
