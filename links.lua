@@ -1,6 +1,6 @@
-local module = {
+local links = {
     "https://sync-api.sirius.menu/";
-    --"https://x.luarmor.net/"
+    "https://x.luarmor.net/";
 }
 
-return module
+return links
