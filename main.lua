@@ -165,6 +165,7 @@ local ui = AntiLua.CreateUI({
     background_color = Color3.fromRGB(16, 16, 16),
     text_color = Color3.fromRGB(255, 255, 255),
     button_color = Color3.fromRGB(82, 82, 91),
+	enable_blur = true,
     toggle_key = Enum.KeyCode.Insert,
     on_toggle = function(enabled)
         if enabled then
